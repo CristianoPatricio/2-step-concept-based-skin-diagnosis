@@ -1,0 +1,11 @@
+__pycache__/
+results/*
+checkpoints/explicd_best.pth
+src/Explicd/*
+data/*.csv
+data/*.npy
+data/*.xlsx
+data/*.npy
+data/PH2/images/*.jpg
+data/Derm7pt/images/*.jpg
+data/HAM10000/images/*.jpg
