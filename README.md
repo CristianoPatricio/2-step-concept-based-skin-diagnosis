@@ -73,13 +73,40 @@ cd src/
 git clone https://github.com/yhygao/Explicd.git
 ```
 
-Then, download the .pth checkpoint of the pretrained ExpLICD on ISIC 2018 from [here](https://drive.google.com/file/d/1jl33-St8ksbivpE5t5PSsrVBL49p4pwU/view?usp=share_link) and move it to the `checkpoints` folder.
+Then, download the .pth checkpoint of the pretrained ExpLICD on ISIC 2018 from [Google Drive](https://drive.google.com/file/d/1jl33-St8ksbivpE5t5PSsrVBL49p4pwU/view?usp=share_link) and move it to the `checkpoints` folder.
 
 For the experiments with CBI-VLM, refer to the [this repository](https://github.com/CristianoPatricio/concept-based-interpretability-VLM).
 
 3.1 [Table 4] Predict class label from image features ($x \rightarrow y$)
 ```bash
 ./scripts/run_x_to_y.sh 0    # GPU ID: 0
+```
+
+3.2 Few-shot disease classification
+
+**Note:** You'll need to download the pre-computed visual features from [Google Drive](https://drive.google.com/file/d/1uZgiHltaCqA2ldMbk7MOZj5jJPt9-uQf/view?usp=sharing) and move it to the `data/visual_features` folder. You could also download the generated concepts ($x \rightarrow c$) for each model from [Google Drive](https://drive.google.com/file/d/1wHdHxMVI8eis_V49PnHvIOk9acjrP2dk/view?usp=sharing) and move it to the `data/concept_prediction` folder.
+
+```bash
+./scripts/run_x_to_c_to_y.sh 0  # GPU ID: 0
+```
+
+## Solutions for Possible Issues
+
+**Issue #1**: *Access to model mistralai/Mistral-7B-Instruct-v0.3 is restricted. You must have access to it and be authenticated to access it. Please log in.*
+
+Solution: Signing in your hugging face account via terminal `huggingface-cli login`, and then enter your token.
+
+## Citation
+
+If you use this repository, please cite:
+
+```
+@article{patricio2024two,
+  title={A Two-Step Concept-Based Approach for Enhanced Interpretability and Trust in Skin Lesion Diagnosis},
+  author={Patr{\'\i}cio, Cristiano and Teixeira, Lu{\'\i}s F and Neves, Jo{\~a}o C},
+  journal={arXiv preprint arXiv:2411.05609},
+  year={2024}
+}
 ```
 
 ⚠️ Work in progress...
