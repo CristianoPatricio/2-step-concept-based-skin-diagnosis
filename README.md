@@ -90,6 +90,12 @@ For the experiments with CBI-VLM, refer to the [this repository](https://github.
 ./scripts/run_x_to_c_to_y.sh 0  # GPU ID: 0
 ```
 
+3.3 VLM + Linear Classifier
+
+```bash
+./scripts/run_vlm_linear_classifier.sh 0  # GPU ID: 0
+```
+
 ## Solutions for Possible Issues
 
 **Issue #1**: *Access to model mistralai/Mistral-7B-Instruct-v0.3 is restricted. You must have access to it and be authenticated to access it. Please log in.*

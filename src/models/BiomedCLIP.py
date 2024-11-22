@@ -57,7 +57,7 @@ class BiomedCLIP:
         else:
             return logits
     
-    """ @torch.no_grad()
+    @torch.no_grad()
     def get_concept_bottleneck(self, img_batch, text_batch):       
         images = torch.stack([self.preprocess(img) for img in img_batch]).to(0)
         texts = self.tokenizer(text_batch, context_length=self.context_length).to(0)
@@ -67,7 +67,7 @@ class BiomedCLIP:
 
         probs = softmax([logits[:,0].mean().cpu().numpy(), logits[:,1:].mean().cpu().numpy()]) # we can take the softmax to get the label probabilities
 
-        return probs[0] """
+        return probs[0]
     
     def get_prompt_embedding(
         self,
@@ -139,6 +139,7 @@ class BiomedCLIP:
             "prompt_ref_embedding_norm": prompt_ref_embedding_norm,
         } 
     
+    """
     def get_concept_bottleneck(
         self,
         image_features_norm,
@@ -181,6 +182,7 @@ class BiomedCLIP:
             ).T
         
         return x_softmax.squeeze().tolist()
+        """
         
 
                                       

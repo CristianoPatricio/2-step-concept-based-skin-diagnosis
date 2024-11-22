@@ -105,6 +105,7 @@ class CLIPViTB16:
             "prompt_ref_embedding_norm": prompt_ref_embedding_norm,
         } 
     
+    """
     def get_concept_bottleneck(
         self,
         image_features_norm,
@@ -147,14 +148,13 @@ class CLIPViTB16:
             ).T
         
         return x_softmax.squeeze().tolist()
+    """
     
-    """ @torch.no_grad()
-    def get_concept_bottleneck(self, img_batch, text_batch):
-        breakpoint()        
+    @torch.no_grad()
+    def get_concept_bottleneck(self, img_batch, text_batch, img_ids, labels):     
         inputs = self.processor(text=[txt for txt in text_batch], images=img_batch, return_tensors="pt", padding=True).to(0)
         outputs = self.model(**inputs)
         logits_per_image = outputs.logits_per_image # this is the image-text similarity score
         probs = softmax([logits_per_image[:,0].mean().cpu().numpy(), logits_per_image[:,1:].mean().cpu().numpy()]) # we can take the softmax to get the label probabilities
 
         return probs[0]
- """
