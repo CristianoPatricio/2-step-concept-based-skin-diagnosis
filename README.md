@@ -64,7 +64,15 @@ conda activate 2-step-skin
 pip install -r requirements.txt
 ```
 
-## 3. Reproduce experiments
+## 3. Demo
+
+Run the following command to interact with our two-step approach through a web demo hosted by Gradio:
+
+```bash
+python demo/app.py
+```
+
+## 4. Reproduce experiments
 
 **Note:** For experiments with ExpLICD, you need to clone the `Explicd` repository into `2-step-concept-based-skin-diagnosis/src/` folder.
 
@@ -114,5 +122,3 @@ If you use this repository, please cite:
   year={2024}
 }
 ```
-
-⚠️ Work in progress...
