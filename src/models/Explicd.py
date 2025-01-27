@@ -54,6 +54,8 @@ class Explicd:
 
         self.model.cuda()
 
+        self.config = config
+
     def get_concept_predictions(self, batch, config):
         template = """The color is {}, the shape is {}, the border is {}, the dermoscopic patterns are {}, the texture is {}, the symmetry is {}, the elevation is {}."""
 
@@ -82,6 +84,32 @@ class Explicd:
             dict_data[img_id] = template.format(*concept_preds)
         
         return dict_data[img_id], raw_scores
+    
+    def get_concept_predictions_for_a_single_image(self, pil_image):
+        template = """The color is {}, the shape is {}, the border is {}, the dermoscopic patterns are {}, the texture is {}, the symmetry is {}, the elevation is {}."""
+
+        val_transforms = copy.deepcopy(self.config.preprocess)
+        
+        imgs = val_transforms(pil_image)
+        imgs = imgs.unsqueeze(dim=0)
+    
+        with torch.no_grad():    
+            data = imgs.cuda()
+            _, image_logits_dict = self.model(data)
+
+            # Get concept predictions
+            concept_preds = []
+            raw_scores = []
+            for key in self.model.concept_token_dict.keys():
+                scores = softmax(image_logits_dict[key].cpu().numpy())
+                raw_scores.extend(scores.flatten())
+                # Get corresponding description
+                description = self.model.concept_list[key][scores.argmax()]
+                concept_preds.append(description)
+
+            pred_concepts = template.format(*concept_preds)
+        
+        return pred_concepts, raw_scores
     
     def get_label_predictions(self, batch, config):
         labels = ["MEL", "NEV", "BCC", "AKIEC", "BKL", "DF", "VASC"]
