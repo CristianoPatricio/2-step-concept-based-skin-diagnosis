@@ -66,11 +66,16 @@ pip install -r requirements.txt
 
 ## 3. Demo
 
+![Get Started](assets/demo_2_step_cb_skin_diagnosis.gif)
+
 Run the following command to interact with our two-step approach through a web demo hosted by Gradio:
 
 ```bash
-python demo/app.py
+cd demo/
+python app.py
 ```
+
+**Note:** We recommend using a GPU with a minimum of 24 GB of memory.
 
 ## 4. Reproduce experiments
 

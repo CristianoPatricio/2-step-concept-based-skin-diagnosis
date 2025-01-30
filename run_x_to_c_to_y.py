@@ -303,6 +303,7 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
         PH2_TRAIN = pd.read_csv(f"data/PH2/splits/PH2_train_split_{split}.csv")
         df_reports_test = df_reports.loc[df_reports.image_id.isin(PH2_TEST.images.to_list())]
         df_reports_train = df_reports.loc[df_reports.image_id.isin(PH2_TRAIN.images.to_list())]
+        df_reports_gt = df_reports
     elif dataset == 'Derm7pt':
         if report_path is not None:
             df_reports = pd.read_csv(report_path) 
@@ -313,6 +314,7 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
         D7_TRAIN = pd.read_csv("data/Derm7pt/splits/derm7pt_train.csv")
         df_reports_test = df_reports.loc[df_reports.image_id.isin(D7_TEST.images.to_list())]
         df_reports_train = df_reports.loc[df_reports.image_id.isin(D7_TRAIN.images.to_list())]
+        df_reports_gt = pd.read_csv("data/Derm7pt_dermatology_reports_explicd_ontology.csv")
     elif dataset == 'HAM10000':
         if report_path is not None:
             df_reports = pd.read_csv(report_path) 
@@ -324,6 +326,7 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
         HAM_VAL = pd.read_csv("data/HAM10000/splits/HAM10000_val.csv")
         df_reports_test = df_reports.loc[df_reports.image_id.isin(HAM_TEST.image_id.to_list())]
         df_reports_train = pd.concat([df_reports.loc[df_reports.image_id.isin(HAM_TRAIN.image_id.to_list())], df_reports.loc[df_reports.image_id.isin(HAM_VAL.image_id.to_list())]])
+        df_reports_gt = pd.read_csv("data/HAM10000_dermatology_reports_explicd_ontology.csv")
     else:
         raise ValueError(f"The dataset {dataset} is not implemented.")
 
@@ -340,7 +343,9 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
     dict_responses = {
         'image_id': [],
         'gt_response': [],
-        'llm_response': []
+        'llm_response': [],
+        'demonstrations': [],
+        'predicted_concepts': []
     }
 
     # Define instruction and query
@@ -352,7 +357,7 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
 
     # Demonstrations
     if use_demos:
-        rices = RICES(dataset=dataset, split=split, valid_ids=[])
+        rices = RICES(dataset=dataset, split=split, feature_extractor="explicd", valid_ids=[])
 
     for img_id, report in tqdm(zip(df_reports_test.image_id.to_list(), df_reports_test.report.to_list())):
 
@@ -364,6 +369,7 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
             # Iterate over retrieved demo_ids and save the respective report into a list
             for id in demos_ids:
                 sample = df_reports_train[df_reports_train.image_id == id].report.to_list()
+                #sample = df_reports_gt[df_reports_gt.image_id == id].report.to_list()
                 demos_to_use_in_prompt.append(sample[0])
         else:
             demos_to_use_in_prompt = None
@@ -387,6 +393,9 @@ def c_to_y(model_name: str, dataset:str, ckpt:str, split=None, raw_values=False,
         dict_responses['image_id'].append(img_id)
         dict_responses['gt_response'].append(gt_response)
         dict_responses['llm_response'].append(llm_response)
+        # NOTE: DEBUG
+        dict_responses['demonstrations'].append(demos_to_use_in_prompt)
+        dict_responses['predicted_concepts'].append(concepts)
 
     # Converter para DataFrame
     df = pd.DataFrame(dict_responses)
