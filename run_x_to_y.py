@@ -187,8 +187,9 @@ def main(model=None, dataset=None, split=None) -> None:
         for batch in tqdm(test_dataloader):
             img_ids = batch["img_id"]
             y_true.append(batch["class_label"].numpy())
-            labels = ['NEV', 'MEL']
-            pred, pred_probs = explicd.get_label_predictions(batch=batch, config=config)
+            template = 'this is a dermoscopic image of '
+            labels = ['nevus', 'melanoma']
+            pred, pred_probs = explicd.calculate_similarity(img_batch=batch, text_batch=[template + l for l in labels], img_ids=img_ids, labels=labels)
             y_pred.append(labels.index(pred))
             y_pred_probs.append(pred_probs)
     

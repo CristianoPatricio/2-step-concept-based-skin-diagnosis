@@ -110,6 +110,33 @@ class Explicd:
             pred_concepts = template.format(*concept_preds)
         
         return pred_concepts, raw_scores
+
+    @torch.no_grad()
+    def calculate_similarity(self, img_batch, text_batch, img_ids=None, labels=None):
+
+        val_transforms = copy.deepcopy(self.config.preprocess)
+        val_transforms.transforms.insert(0, transforms.ToPILImage())
+
+        imgs = val_transforms(np.asarray([Image.open(x) for x in img_batch["img_path"]]).squeeze())
+        batch = imgs.unsqueeze(dim=0)
+    
+        with torch.no_grad():    
+            data = batch.cuda()
+            texts = self.model.tokenizer(text_batch).to(0)
+
+            image_features = self.model.model.visual(data)
+            text_features = self.model.model.text(texts)
+
+            logits = (image_features @ text_features.t()).detach().softmax(dim=-1)
+            sorted_indices = torch.argsort(logits, dim=-1, descending=True)
+
+            logits = logits.cpu().numpy()
+            sorted_indices = sorted_indices.cpu().numpy()
+
+        if labels is not None:
+            return labels[sorted_indices[0][0]], logits[0][sorted_indices[0][0]]
+        else:
+            return logits
     
     def get_label_predictions(self, batch, config):
         labels = ["MEL", "NEV", "BCC", "AKIEC", "BKL", "DF", "VASC"]
