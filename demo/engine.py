@@ -60,7 +60,7 @@ def load_models():
     seed_everything(seed=42)
     
     # Load ExpLICD
-    config = create_explicd_config(gpu_id=2)    # TODO: Make this dynamically
+    config = create_explicd_config(gpu_id=0)    # TODO: Make this dynamically
     model_step_1 = Explicd(config=config)
 
     # Load MMedLlama3

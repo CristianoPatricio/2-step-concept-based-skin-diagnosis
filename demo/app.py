@@ -80,7 +80,7 @@ function refresh() {
 """
 
 # Function to get the concept predictions from input image using ExpLICD (Step 1)
-def step_1(pil_image):
+def step_1(pil_image, progress=gr.Progress()):
 
     predicted_concepts, raw_scores = engine.x_to_c(pil_image=pil_image, model_step_1=model_step_1)
 
@@ -91,14 +91,28 @@ def step_1(pil_image):
     input_query = query.format(predicted_concepts)
     final_prompt = instruction + input_query
 
+    # Simulate processing
+    progress(0, desc="Predicting clinical concepts...")
+    time.sleep(1)
+    progress(0.5, desc="Predicting clinical concepts...")
+    time.sleep(1.5)
+    progress(1, desc="Predicting clinical concepts...")
+
     return final_prompt
 
 # Function to get the final diagnosis (Step 2)
-def step_2(intermediate_prompt):
+def step_2(intermediate_prompt, progress=gr.Progress()):
     llm_response = engine.c_to_y(intermediate_prompt=intermediate_prompt, model_step_2=model_step_2)
 
     predicted_concepts = intermediate_prompt[intermediate_prompt.find("dermoscopic concepts:")+len("dermoscopic concepts:"):intermediate_prompt.find(". \n###Options:")]
     textual_explanation = predicted_concepts + f" Thus the diagnosis is {llm_response}."
+
+    # Simulate processing
+    progress(0, desc="Generating final diagnosis...")
+    time.sleep(1)
+    progress(0.5, desc="Generating final diagnosis...")
+    time.sleep(1.5)
+    progress(1, desc="Generating final diagnosis...")
 
     return textual_explanation
 
@@ -189,7 +203,7 @@ def main():
             [image_input, intermediate_output, final_output], 
             None, 
             preprocess=False
-        ).success(None, gr.Info("This is some info"))
+        )
 
         btn_incorrect.click(
             lambda *args: callback.flag(list(args), flag_option = ["Incorrect"]), 
