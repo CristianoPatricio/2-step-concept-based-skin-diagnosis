@@ -1,5 +1,7 @@
 # A Two-Step Concept-Based Approach for Enhanced Interpretability and Trust in Skin Lesion Diagnosis 🩺
 
+Official implementation of the paper [A two-step concept-based approach for enhanced interpretability and trust in skin lesion diagnosis](https://doi.org/10.1016/j.csbj.2025.02.013), CSBJ 2025.
+
 ## Abstract
 The main challenges hindering the adoption of deep learning-based systems in clinical settings are the scarcity of annotated data and the lack of interpretability and trust in these systems. Concept Bottleneck Models (CBMs) offer inherent interpretability by constraining the final disease prediction on a set of human-understandable concepts. However, this inherent interpretability comes at the cost of greater annotation burden. Additionally, adding new concepts requires retraining the entire system. In this work, we introduce a novel two-step methodology that addresses both of these challenges. By simulating the two stages of a CBM, we utilize a pretrained Vision Language Model (VLM) to automatically predict clinical concepts, and a Large Language Model (LLM) to generate disease diagnoses based on the predicted concepts. We validate our approach on three skin lesion datasets, demonstrating that it outperforms traditional CBMs and state-of-the-art explainable methods, all without requiring any training and utilizing only a few annotated examples.
 
@@ -121,9 +123,12 @@ If you use this repository, please cite:
 
 ```
 @article{patricio2024two,
-  title={A Two-Step Concept-Based Approach for Enhanced Interpretability and Trust in Skin Lesion Diagnosis},
-  author={Patr{\'\i}cio, Cristiano and Teixeira, Lu{\'\i}s F and Neves, Jo{\~a}o C},
-  journal={arXiv preprint arXiv:2411.05609},
-  year={2024}
+    title={A Two-Step Concept-Based Approach for Enhanced Interpretability and Trust in Skin Lesion Diagnosis},
+    author = {Cristiano Patrício and Luís F. Teixeira and João C. Neves},
+    journal = {Computational and Structural Biotechnology Journal},
+    volume = {28},
+    pages = {71-79},
+    year = {2025},
+    doi = {https://doi.org/10.1016/j.csbj.2025.02.013}
 }
 ```
